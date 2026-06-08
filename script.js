@@ -16,7 +16,8 @@ const player = {
 // store items to collect
 const items = [];
 let score = 0;
-let lives = 30; 
+let lives = 3; 
+let gameOver = false;
 
 // draw your player
 function drawPlayer() {
@@ -104,6 +105,11 @@ function updateItems() {
             items.splice(index, 1);
             lives--;
         }
+
+        if (lives <= 0)
+        {
+            gameOver = true;
+        }
     });
 }
 
@@ -120,6 +126,15 @@ function createItem() {
 
 // your main game loop
 function gameLoop() {
+
+    if (gameOver)
+    {
+        ctx.fillStyle = "white";
+        ctx.font = "bold 40px Arial";
+        ctx.fillText("GAME OVER", 80,280);
+        return;
+    }
+
     ctx.clearRect(0, 0, canvas.width, canvas.height);
     
     updatePlayer();
