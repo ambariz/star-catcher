@@ -81,11 +81,26 @@ function drawLives()
 function drawBackground() 
 {
     let gradient = ctx.createLinearGradient(0,0,0,canvas.height);
-    gradient.addColorStop(0, "#1e3c72")
-    gradient.addColorStop(1, "#87ceeb")
+    gradient.addColorStop(0, "#0f172a")
+    gradient.addColorStop(1, "#1e40af")
 
     ctx.fillStyle = gradient;
     ctx.fillRect(0,0, canvas.width, canvas.height);
+
+    ctx.fillStyle = "white";
+
+    for (let i = 0; i<40; i++)
+    {
+        ctx.beginPath();
+        ctx.arc( 
+            (i*37) % canvas.width,
+            (i * 83) % canvas.height,
+            1.5,
+            0,
+            Math.PI * 2
+        );
+        ctx.fill();
+    }
 }
 
 // update the player's position
