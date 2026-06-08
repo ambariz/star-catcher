@@ -75,7 +75,17 @@ function drawLives()
 {
     ctx.fillStyle = "#fff";
     ctx.font = 'bold 20px Arial';
-    ctx.fillText('Lives: ' + lives, 10,60)
+    ctx.fillText('Lives: ' + lives, 318, 30)
+}
+
+function drawBackground() 
+{
+    let gradient = ctx.createLinearGradient(0,0,0,canvas.height);
+    gradient.addColorStop(0, "#1e3c72")
+    gradient.addColorStop(1, "#87ceeb")
+
+    ctx.fillStyle = gradient;
+    ctx.fillRect(0,0, canvas.width, canvas.height);
 }
 
 // update the player's position
@@ -116,10 +126,10 @@ function updateItems() {
 // create items
 function createItem() {
     const item = {
-        x: Math.random() * (canvas.width - 20),
+        x: Math.random() * (canvas.width - 40) + 20,
         y: -20,
         radius: 10,
-        dy: Math.random() * 2 + 1
+        dy: Math.random() * 1.5 + 1
     };
     items.push(item);
 }
@@ -135,7 +145,7 @@ function gameLoop() {
         return;
     }
 
-    ctx.clearRect(0, 0, canvas.width, canvas.height);
+    drawBackground();
     
     updatePlayer();
     updateItems();
