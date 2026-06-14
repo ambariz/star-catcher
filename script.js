@@ -28,6 +28,9 @@ let lives = 3;
 let gameOver = false;
 let highScore = localStorage.getItem("highScore") || 0;
 
+let gameStarted = false
+
+
 
 function drawPlayer() {
     ctx.fillStyle = "#FFD166";
@@ -92,6 +95,13 @@ function drawStar(x, y, size) {
     ctx.fill();
 }
 
+function drawLevel() {
+    const level = Math.floor(score / 10) +1;
+    ctx.fillStyle = "#ffffff";
+    ctx.font = "bold 20px Arial";
+    ctx.fillText("Level: "+ level, canvas.width / 2 - 40, 30);
+}
+
 function drawBadStar(x, y, size) {
     ctx.fillStyle = "#ff0000";
 
@@ -139,7 +149,7 @@ function drawLives()
 {
     ctx.fillStyle = "#fff";
     ctx.font = 'bold 20px Arial';
-    ctx.fillText('Lives: ' + lives, 1195, 30)
+    ctx.fillText('Lives: ' + lives, canvas.width - 85, 30)
 }
 
 function drawBackground() 
@@ -171,6 +181,22 @@ function updatePlayer() {
     player.x += player.dx;
     if (player.x < 0) player.x = 0;
     if (player.x + player.width > canvas.width) player.x = canvas.width - player.width;
+}
+
+function drawWelcome() {
+    drawBackground();
+
+    ctx.fillStyle = "#fbfbfb"
+    ctx.font = "bold 60px Arial";
+    ctx.textAlign = "center";
+    ctx.fillText("STAR CATCHER", canvas.width / 2, canvas.height /2 - 50);
+    ctx.fillStyle = "#ffffff"
+    ctx.font = "28px Arial";
+    ctx.textAlign = "center";
+    ctx.fillText("Catch the stars, avoid the red ones!", canvas.width / 2, canvas.height /2 + 10);
+    ctx.font = "24px Arial";
+    ctx.fillText("Press SPACE to Start", canvas.width / 2, canvas.height /2 + 80);
+    ctx.textAlign = "left";
 }
 
 function updateItems() {
@@ -212,12 +238,13 @@ function updateItems() {
 
 function createItem() 
 {
-    const isBad = Math.random() < 0.25;
+    const badStarChance = Math.min(0.20 + (score * 0.015), 0.80);
+    const isBad = Math.random() < badStarChance;
     const item = {
         x: Math.random() * (canvas.width - 40) + 20,
         y: -20,
         radius: 20,
-        dy: Math.random() * 1.5 + 1,
+        dy: Math.random() * 2 + 2 + (score * 0.1),
         isBad: isBad
     };
 
@@ -226,16 +253,28 @@ function createItem()
 
 function gameLoop() {
 
+    if (!gameStarted) {
+        drawWelcome();
+        requestAnimationFrame(gameLoop);
+        return;
+    }
+
     if (gameOver)
     {
         ctx.fillStyle = "white";
+
+        ctx.textAlign = "center";
+
         ctx.font = "bold 40px Arial";
-        ctx.fillText("GAME OVER", 60, 250);
+        ctx.fillText("GAME OVER", canvas.width / 2, canvas.height / 2 - 40);
 
         ctx.font = "20px Arial";
-        ctx.fillText(`Final Score: ${score}`, 120, 300);
+        ctx.fillText(`Final Score: ${score}`, canvas.width / 2, canvas.height / 2 + 10);
 
-        ctx.fillText("Press R to Restart", 90, 340);
+        ctx.fillText("Press R to Restart", canvas.width / 2, canvas.height / 2 + 50);
+
+        ctx.textAlign = "left";
+
         return;
     }
 
@@ -247,6 +286,7 @@ function gameLoop() {
     drawPlayer();
     drawItems();
     drawScore();
+    drawLevel();
     drawLives();
     
     requestAnimationFrame(gameLoop);
@@ -272,6 +312,10 @@ document.addEventListener("keydown", (e) => {
         items.length = 0;
 
         gameLoop();
+    }
+
+    if (e.code === "Space" && !gameStarted) {
+        gameStarted = true;
     }
 });
 
