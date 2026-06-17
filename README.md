@@ -1,4 +1,4 @@
-# ⭐ Star Catcher
+# The Star Catcher
 
 A fast arcade game where you catch falling stars, avoid dangerous red stars, collect power-ups, and beat your high score.
 
